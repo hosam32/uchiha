@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 7.6.4.1 (Linux)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="00:00:00"/>
+	<style type="text/css">
+		@page { size: 8.27in 11.69in; margin: 0.79in }
+		p { line-height: 115%; margin-bottom: 0.1in; background: transparent }
+		pre { background: transparent }
+		pre.western { font-family: "Liberation Mono", monospace; font-size: 10pt }
+		pre.cjk { font-family: "NSimSun", monospace; font-size: 10pt }
+		pre.ctl { font-family: "Liberation Mono", monospace; font-size: 10pt }
+	</style>
+</head>
+<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre class="western">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;Scoreboard Pro&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        input[type=&quot;text&quot;],
+        input[type=&quot;number&quot;] {
+            width: 80px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input[type=&quot;text&quot;] {
+            width: 120px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .total-cell {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;container&quot;&gt;
+    &lt;table id=&quot;mainTable&quot;&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;<span lang="hi-IN">اسماء اللاعبين</span>&lt;/th&gt;
+                &lt;th&gt;<span lang="hi-IN">الجولة </span>1&lt;/th&gt;
+                &lt;th&gt;<span lang="hi-IN">الجولة </span>2&lt;/th&gt;
+                &lt;th&gt;<span lang="hi-IN">الجولة </span>3&lt;/th&gt;
+                &lt;th&gt;<span lang="hi-IN">الجولة </span>4&lt;/th&gt;
+                &lt;th&gt;<span lang="hi-IN">الجولة </span>5&lt;/th&gt;
+                &lt;th&gt;<span lang="hi-IN">الإجمالي</span>&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;script&gt;
+                for(let i = 1; i &lt;= 10; i++) {
+                    document.write(`
+                        &lt;tr&gt;
+                            &lt;td&gt;&lt;input type=&quot;text&quot; value=&quot;<span lang="hi-IN">لاعب </span>${i}&quot; class=&quot;player-name&quot;&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;input type=&quot;number&quot; class=&quot;score&quot; min=&quot;0&quot;&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;input type=&quot;number&quot; class=&quot;score&quot; min=&quot;0&quot;&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;input type=&quot;number&quot; class=&quot;score&quot; min=&quot;0&quot;&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;input type=&quot;number&quot; class=&quot;score&quot; min=&quot;0&quot;&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;input type=&quot;number&quot; class=&quot;score&quot; min=&quot;0&quot;&gt;&lt;/td&gt;
+                            &lt;td class=&quot;total total-cell&quot;&gt;0&lt;/td&gt;
+                        &lt;/tr&gt;
+                    `);
+                }
+            &lt;/script&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;button onclick=&quot;resetScores()&quot;&gt;<span lang="hi-IN">إعادة تهيئة</span>&lt;/button&gt;
+
+    &lt;table id=&quot;rankingTable&quot;&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;<span lang="hi-IN">المرتبة</span>&lt;/th&gt;
+                &lt;th&gt;<span lang="hi-IN">اسم اللاعب</span>&lt;/th&gt;
+                &lt;th&gt;<span lang="hi-IN">الإجمالي</span>&lt;/th&gt;
+                &lt;th&gt;<span lang="hi-IN">أقل نتيجة</span>&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;script&gt;
+                for(let i = 1; i &lt;= 10; i++) {
+                    document.write(`
+                        &lt;tr&gt;
+                            &lt;td&gt;${i}&lt;/td&gt;
+                            &lt;td class=&quot;rank-name&quot;&gt;-&lt;/td&gt;
+                            &lt;td class=&quot;rank-total&quot;&gt;-&lt;/td&gt;
+                            &lt;td class=&quot;rank-min&quot;&gt;-&lt;/td&gt;
+                        &lt;/tr&gt;
+                    `);
+                }
+            &lt;/script&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+    // <span lang="hi-IN">تحديث تلقائي عند تغيير أي قيمة</span>
+    document.querySelectorAll('input').forEach(input =&gt; {
+        input.addEventListener('input', updateTotals);
+    });
+
+    function updateTotals() {
+        const players = [];
+        const mainRows = document.querySelectorAll('#mainTable tbody tr');
+        
+        mainRows.forEach(row =&gt; {
+            const nameInput = row.querySelector('.player-name');
+            const scoreInputs = row.querySelectorAll('.score');
+            const totalCell = row.querySelector('.total');
+            
+            const scores = Array.from(scoreInputs).map(input =&gt; {
+                return parseInt(input.value) || 0;
+            });
+            
+            const total = scores.reduce((a, b) =&gt; a + b, 0);
+            totalCell.textContent = total;
+            
+            const validScores = scores.filter(score =&gt; score &gt; 0);
+            const minScore = validScores.length &gt; 0 ? Math.min(...validScores) : 0;
+            
+            players.push({
+                name: nameInput.value,
+                total: total,
+                min: minScore
+            });
+        });
+
+        updateRanking(players);
+    }
+
+    function updateRanking(players) {
+        // <span lang="hi-IN">ترتيب اللاعبين تصاعدياً حسب الإجمالي </span>(<span lang="hi-IN">الأقل أولاً</span>)
+        const sortedPlayers = players.sort((a, b) =&gt; a.total - b.total);
+        
+        const rankingRows = document.querySelectorAll('#rankingTable tbody tr');
+        rankingRows.forEach((row, index) =&gt; {
+            const player = sortedPlayers[index];
+            if(player) {
+                row.querySelector('.rank-name').textContent = player.name;
+                row.querySelector('.rank-total').textContent = player.total;
+                row.querySelector('.rank-min').textContent = player.min;
+            } else {
+                row.querySelector('.rank-name').textContent = '-';
+                row.querySelector('.rank-total').textContent = '-';
+                row.querySelector('.rank-min').textContent = '-';
+            }
+        });
+    }
+
+    function resetScores() {
+        document.querySelectorAll('.score').forEach(input =&gt; {
+            input.value = '';
+        });
+        document.querySelectorAll('.player-name').forEach((input, index) =&gt; {
+            input.value = `<span lang="hi-IN">لاعب </span>${index + 1}`;
+        });
+        updateTotals();
+    }
+
+    // <span lang="hi-IN">التشغيل الأولي</span>
+    updateTotals();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</body>
+</html>
