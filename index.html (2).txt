@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Scoreboard Pro</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 80px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input[type="text"] {
+            width: 120px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .total-cell {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <table id="mainTable">
+        <thead>
+            <tr>
+                <th>اسماء اللاعبين</th>
+                <th>الجولة 1</th>
+                <th>الجولة 2</th>
+                <th>الجولة 3</th>
+                <th>الجولة 4</th>
+                <th>الجولة 5</th>
+                <th>الإجمالي</th>
+            </tr>
+        </thead>
+        <tbody>
+            <script>
+                for(let i = 1; i <= 10; i++) {
+                    document.write(`
+                        <tr>
+                            <td><input type="text" value="لاعب ${i}" class="player-name"></td>
+                            <td><input type="number" class="score" min="0"></td>
+                            <td><input type="number" class="score" min="0"></td>
+                            <td><input type="number" class="score" min="0"></td>
+                            <td><input type="number" class="score" min="0"></td>
+                            <td><input type="number" class="score" min="0"></td>
+                            <td class="total total-cell">0</td>
+                        </tr>
+                    `);
+                }
+            </script>
+        </tbody>
+    </table>
+
+    <button onclick="resetScores()">إعادة تهيئة</button>
+
+    <table id="rankingTable">
+        <thead>
+            <tr>
+                <th>المرتبة</th>
+                <th>اسم اللاعب</th>
+                <th>الإجمالي</th>
+                <th>أقل نتيجة</th>
+            </tr>
+        </thead>
+        <tbody>
+            <script>
+                for(let i = 1; i <= 10; i++) {
+                    document.write(`
+                        <tr>
+                            <td>${i}</td>
+                            <td class="rank-name">-</td>
+                            <td class="rank-total">-</td>
+                            <td class="rank-min">-</td>
+                        </tr>
+                    `);
+                }
+            </script>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // تحديث تلقائي عند تغيير أي قيمة
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', updateTotals);
+    });
+
+    function updateTotals() {
+        const players = [];
+        const mainRows = document.querySelectorAll('#mainTable tbody tr');
+        
+        mainRows.forEach(row => {
+            const nameInput = row.querySelector('.player-name');
+            const scoreInputs = row.querySelectorAll('.score');
+            const totalCell = row.querySelector('.total');
+            
+            const scores = Array.from(scoreInputs).map(input => {
+                return parseInt(input.value) || 0;
+            });
+            
+            const total = scores.reduce((a, b) => a + b, 0);
+            totalCell.textContent = total;
+            
+            const validScores = scores.filter(score => score > 0);
+            const minScore = validScores.length > 0 ? Math.min(...validScores) : 0;
+            
+            players.push({
+                name: nameInput.value,
+                total: total,
+                min: minScore
+            });
+        });
+
+        updateRanking(players);
+    }
+
+    function updateRanking(players) {
+        // ترتيب اللاعبين تصاعدياً حسب الإجمالي (الأقل أولاً)
+        const sortedPlayers = players.sort((a, b) => a.total - b.total);
+        
+        const rankingRows = document.querySelectorAll('#rankingTable tbody tr');
+        rankingRows.forEach((row, index) => {
+            const player = sortedPlayers[index];
+            if(player) {
+                row.querySelector('.rank-name').textContent = player.name;
+                row.querySelector('.rank-total').textContent = player.total;
+                row.querySelector('.rank-min').textContent = player.min;
+            } else {
+                row.querySelector('.rank-name').textContent = '-';
+                row.querySelector('.rank-total').textContent = '-';
+                row.querySelector('.rank-min').textContent = '-';
+            }
+        });
+    }
+
+    function resetScores() {
+        document.querySelectorAll('.score').forEach(input => {
+            input.value = '';
+        });
+        document.querySelectorAll('.player-name').forEach((input, index) => {
+            input.value = `لاعب ${index + 1}`;
+        });
+        updateTotals();
+    }
+
+    // التشغيل الأولي
+    updateTotals();
+</script>
+</body>
+</html>
